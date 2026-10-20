@@ -2,13 +2,13 @@
 
 ## Student Information
 
-- **Student Name:**
-- **Student ID:**
+- **Student Name:*Khon Min Wai Than*
+- **Student ID:*6734667*
 
 ## Test Credentials
 
-- **Username / Email:**
-- **Password:**
+- **Username / Email:*u6734667@au.edu*
+- **Password:*P@ssdoubleyou0rd*
 
 ## Prerequisites
 
