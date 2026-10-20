@@ -8,7 +8,7 @@
 ## Deployed URLs
 
 - **Frontend:** https://web-course-final-exam-6734667-front.vercel.app
-- **Backend:** https://web-course-final-exam-6734667-backend.vercel.app
+- **Backend:** https://web-course-final-exam-6734667-backe.vercel.app
 
 ## Test Credentials
 
