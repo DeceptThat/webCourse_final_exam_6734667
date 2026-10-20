@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import {
   Alert,
   Box,
+  Button,
   Chip,
   Paper,
   Table,
@@ -16,12 +17,14 @@ import {
 } from "@mui/material";
 import { UserContext } from "../context/UserContext";
 import StatusChip from "../components/StatusChip";
+import CourseDetailsDialog from "../components/CourseDetailsDialog";
 
 export default function MyEnrollments() {
   const { user, apiFetch } = useContext(UserContext);
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [detailsId, setDetailsId] = useState(null);
 
   useEffect(() => {
     apiFetch(`/api/user/${user._id}`)
@@ -53,17 +56,18 @@ export default function MyEnrollments() {
               <TableCell>Duration</TableCell>
               <TableCell>Price</TableCell>
               <TableCell>Status</TableCell>
+              <TableCell align="right">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {loading && (
               <TableRow>
-                <TableCell colSpan={6}>Loading...</TableCell>
+                <TableCell colSpan={7}>Loading...</TableCell>
               </TableRow>
             )}
             {!loading && courses.length === 0 && (
               <TableRow>
-                <TableCell colSpan={6}>You have not enrolled in any course yet.</TableCell>
+                <TableCell colSpan={7}>You have not enrolled in any course yet.</TableCell>
               </TableRow>
             )}
             {courses.map((c) => (
@@ -80,11 +84,18 @@ export default function MyEnrollments() {
                 <TableCell>
                   <StatusChip status={c.status} />
                 </TableCell>
+                <TableCell align="right">
+                  <Button size="small" onClick={() => setDetailsId(c._id)}>
+                    Details
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+
+      {detailsId && <CourseDetailsDialog courseId={detailsId} onClose={() => setDetailsId(null)} />}
     </Box>
   );
 }

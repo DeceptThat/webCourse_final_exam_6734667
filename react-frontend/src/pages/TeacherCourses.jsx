@@ -6,10 +6,6 @@ import {
   Box,
   Button,
   Chip,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
   Paper,
   Stack,
   Table,
@@ -24,6 +20,7 @@ import {
 import { UserContext } from "../context/UserContext";
 import StatusChip from "../components/StatusChip";
 import CourseFormDialog from "../components/CourseFormDialog";
+import CourseDetailsDialog from "../components/CourseDetailsDialog";
 
 export default function TeacherCourses() {
   const { apiFetch } = useContext(UserContext);
@@ -32,7 +29,7 @@ export default function TeacherCourses() {
   const [message, setMessage] = useState(null);
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState(null);
-  const [viewing, setViewing] = useState(null);
+  const [detailsId, setDetailsId] = useState(null);
 
   async function loadCourses() {
     try {
@@ -138,8 +135,8 @@ export default function TeacherCourses() {
                   <StatusChip status={c.status} />
                 </TableCell>
                 <TableCell align="right" sx={{ whiteSpace: "nowrap" }}>
-                  <Button size="small" onClick={() => setViewing(c)}>
-                    Students
+                  <Button size="small" onClick={() => setDetailsId(c._id)}>
+                    Details
                   </Button>
                   <Button size="small" onClick={() => openEdit(c)}>
                     Edit
@@ -160,36 +157,7 @@ export default function TeacherCourses() {
 
       {formOpen && <CourseFormDialog course={editing} onClose={() => setFormOpen(false)} onSave={handleSave} />}
 
-      <Dialog open={Boolean(viewing)} onClose={() => setViewing(null)} fullWidth maxWidth="sm">
-        <DialogTitle>Enrolled Students: {viewing?.name}</DialogTitle>
-        <DialogContent>
-          {viewing?.students?.length ? (
-            <Table size="small">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Username</TableCell>
-                  <TableCell>Email</TableCell>
-                  <TableCell>Enrolled At</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {viewing.students.map((s) => (
-                  <TableRow key={s._id}>
-                    <TableCell>{s.username}</TableCell>
-                    <TableCell>{s.email}</TableCell>
-                    <TableCell>{new Date(s.enrolledAt).toLocaleString()}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          ) : (
-            <Typography>No students enrolled yet.</Typography>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setViewing(null)}>Close</Button>
-        </DialogActions>
-      </Dialog>
+      {detailsId && <CourseDetailsDialog courseId={detailsId} onClose={() => setDetailsId(null)} />}
     </Box>
   );
 }

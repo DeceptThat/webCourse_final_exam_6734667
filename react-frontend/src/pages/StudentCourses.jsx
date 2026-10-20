@@ -19,6 +19,7 @@ import {
 } from "@mui/material";
 import { UserContext } from "../context/UserContext";
 import StatusChip from "../components/StatusChip";
+import CourseDetailsDialog from "../components/CourseDetailsDialog";
 
 export default function StudentCourses() {
   const { apiFetch } = useContext(UserContext);
@@ -27,6 +28,7 @@ export default function StudentCourses() {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState(null);
   const [enrollingId, setEnrollingId] = useState(null);
+  const [detailsId, setDetailsId] = useState(null);
 
   async function loadCourses(query = "") {
     try {
@@ -115,7 +117,7 @@ export default function StudentCourses() {
               <TableCell>Price</TableCell>
               <TableCell>Seats Left</TableCell>
               <TableCell>Status</TableCell>
-              <TableCell align="right">Action</TableCell>
+              <TableCell align="right">Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -146,12 +148,19 @@ export default function StudentCourses() {
                 <TableCell>
                   <StatusChip status={c.status} />
                 </TableCell>
-                <TableCell align="right">{enrollButton(c)}</TableCell>
+                <TableCell align="right" sx={{ whiteSpace: "nowrap" }}>
+                  <Button size="small" sx={{ mr: 1 }} onClick={() => setDetailsId(c._id)}>
+                    Details
+                  </Button>
+                  {enrollButton(c)}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
+
+      {detailsId && <CourseDetailsDialog courseId={detailsId} onClose={() => setDetailsId(null)} />}
     </Box>
   );
 }
